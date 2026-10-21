@@ -1,24 +1,24 @@
-# Usamos una imagen oficial de Python ligera
+# Imagen base oficial de Python
 FROM python:3.13-slim
 
-# Directorio de trabajo dentro del contenedor
+# Directorio de trabajo
 WORKDIR /app
 
-# Instalar dependencias del sistema necesarias para compilar paquetes
+# Dependencias del sistema
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar el archivo de dependencias e instalarlas
+# Copiar e instalar dependencias de Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el resto del código del proyecto al contenedor
+# Copiar el código del proyecto
 COPY . .
 
-# Exponer el puerto en el que corre la aplicación
+# Exponer el puerto de Django
 EXPOSE 8000
 
-# Comando por defecto para iniciar el servidor
+# Comando para arrancar el servidor
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
